@@ -4,10 +4,10 @@
 
 void (*opcodeTable[17])(chip8_h) = 
 {
-	cpuSpecial, cpuGoto, cpuCallSub, cpuSkipEqualsImmediate, cpuSkipNotEqualsImmediate,
-	cpuSkipEqualsReg, cpuSetRegImmediate, cpuIncRegImmediate, cpuNULL,
-	cpuNULL, cpuNULL, cpuNULL, cpuNULL, cpuNULL,
-	cpuNULL, cpuNULL, cpuNULL
+	cpuSpecial, cpuGoto, cpuCallSub, cpuSkipEqualsImmediate,
+	cpuSkipNotEqualsImmediate, cpuSkipEqualsReg, cpuSetRegImmediate,
+	cpuIncRegImmediate, cpuNULL, cpuNULL, cpuNULL,
+	cpuNULL, cpuNULL, cpuNULL, cpuNULL, cpuNULL,cpuNULL
 };
 
 void cpuNULL(chip8_h state) {}

@@ -9,7 +9,7 @@ extern "C"{
 #endif
 
 ///////////////////////////
-///FUNCTION ARRAY TABLES///
+///Function Array Tables///
 ///////////////////////////
 
 void (*opcodeTable[17])(chip8_h);			//use first hex digit
@@ -19,7 +19,7 @@ void (*keyOpTable[11])(chip8_h);			//EXXX: use second last hex digit
 void (*fTable[16])(chip8_h);				//FXXX: use switch
 
 //////////////////////
-///OPCODE FUNCTIONS///
+///Opcode Functions///
 //////////////////////
 
 void cpuNULL(chip8_h state);

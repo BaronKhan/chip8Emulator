@@ -42,6 +42,7 @@ void emulateCycle(chip8_h state);
 int drawFlag(chip8_h state);
 void setKeys(chip8_h state);
 
+
 #ifdef __cplusplus
 };
 #endif

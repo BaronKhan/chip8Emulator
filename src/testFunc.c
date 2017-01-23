@@ -34,7 +34,7 @@ int main() {
 	//-------------------------------------------------------------------------------------------------
 
 	printf("\nTesting: 	2NNN	Flow	*(0xNNN)()	Calls subroutine at NNN.\n");
-	printf("And: 		00EE	Flow	return;	Returns from a subroutine.\n");
+	printf("And: 		00EE	Flow	return;		Returns from a subroutine.\n");
 	for (int i=0; i <= 10; i++) {
 		uint16_t expectedAddr = 0x200+i;
 		setPc(myChip8, 0x200);
