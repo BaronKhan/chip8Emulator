@@ -3,3 +3,5 @@ test:
 	gcc $(SOURCES) -o tst/testFunc
 	./tst/testFunc
 
+clean:
+	rm tst/testFunc

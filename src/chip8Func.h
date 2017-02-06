@@ -12,11 +12,14 @@ extern "C"{
 ///Function Array Tables///
 ///////////////////////////
 
-void (*opcodeTable[17])(chip8_h);			//use first hex digit
-//void (*specialTable[3])(chip8_h);			//0XXX: use switch
-void (*arithmeticTable[16])(chip8_h);		//8XXX: use last hex digit
-void (*keyOpTable[11])(chip8_h);			//EXXX: use second last hex digit
-void (*fTable[16])(chip8_h);				//FXXX: use switch
+void (*opcodeTable[17])(chip8_h);           //use first hex digit
+void (*arithmeticTable[15])(chip8_h);       //8XXX: use last hex digit
+void (*keyOpTable[11])(chip8_h);            //EXXX: use second last hex digit
+void (*otherTable[16])(chip8_h);            //FXXX: use switch
+
+void cpuArithmetic(chip8_h state);
+void cpuKeyOp(chip8_h state);
+void cpuOther(chip8_h state);
 
 //////////////////////
 ///Opcode Functions///
@@ -33,6 +36,11 @@ void cpuSkipNotEqualsImmediate(chip8_h state);
 void cpuSkipEqualsReg(chip8_h state);
 void cpuSetRegImmediate(chip8_h state);
 void cpuIncRegImmediate(chip8_h state);
+void cpuMOV(chip8_h state);
+void cpuOR(chip8_h state);
+void cpuAND(chip8_h state);
+void cpuXOR(chip8_h state);
+void cpuADD(chip8_h state);
 
 #ifdef __cplusplus
 };
