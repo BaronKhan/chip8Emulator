@@ -211,24 +211,6 @@ int main() {
     passCount = 0;
     for (int i = 0; i < 10; i++) {
         setPc(myChip8, 0x200);
-        uint8_t opcode[] = {0x80, (i<<4) | 3};
-        writeMem(myChip8, 0x200, 2, opcode);
-        setRegister(myChip8, 0, 40);
-        setRegister(myChip8, i, i*10);
-        int reg0 = getRegister(myChip8, 0);
-        emulateCycle(myChip8);
-        printf("Register %d has value %04x, opcode is %04x setting V0 to %04x, expected %04x\n",
-            i, getRegister(myChip8, i), (opcode[0]<<8) + opcode[1], getRegister(myChip8, 0), 40 ^ (i*10));
-        if (getRegister(myChip8, 0) == (reg0 ^ getRegister(myChip8, i))) { passCount++; }
-    }
-    printf("Number of tests passed: %d/10\n", passCount);
-
-    //-------------------------------------------------------------------------------------------------
-
-    printf("\nTesting:  8XY4    Math    Vx += Vy    Adds VY to VX. VF is set to 1 when there's a carry\n");
-    passCount = 0;
-    for (int i = 0; i < 10; i++) {
-        setPc(myChip8, 0x200);
         uint8_t opcode[] = {0x80, (i<<4) | 4};
         writeMem(myChip8, 0x200, 2, opcode);
         setRegister(myChip8, 0, 40);
@@ -238,6 +220,74 @@ int main() {
         printf("Register %d has value %04x, setting V0 to %04x, expected %04x, VF is %d\n",
             i, getRegister(myChip8, i), getRegister(myChip8, 0), (uint8_t)(reg0 + (i*25)), getRegister(myChip8, 0xF));
         if (getRegister(myChip8, 0) == (uint8_t)(reg0 + getRegister(myChip8, i))) { passCount++; }
+    }
+    printf("Number of tests passed: %d/10\n", passCount);
+
+    //-------------------------------------------------------------------------------------------------
+
+    printf("\nTesting:  8XY5   Math    Vx -= Vy    VY is subtracted from VX. VF is set to 0 when there's a borrow,\n");
+    passCount = 0;
+    for (int i = 0; i < 10; i++) {
+        setPc(myChip8, 0x200);
+        uint8_t opcode[] = {0x80, (i<<4) | 5};
+        writeMem(myChip8, 0x200, 2, opcode);
+        setRegister(myChip8, 0, 40);
+        setRegister(myChip8, i, i*10);
+        int reg0 = getRegister(myChip8, 0);
+        emulateCycle(myChip8);
+        printf("Register %d has value %d, setting V0 to %d, expected %d, VF is %d\n",
+            i, getRegister(myChip8, i), getRegister(myChip8, 0), (uint8_t)(reg0 - (i*10)), getRegister(myChip8, 0xF));
+        if (getRegister(myChip8, 0) == (uint8_t)(reg0 - getRegister(myChip8, i))) { passCount++; }
+    }
+    printf("Number of tests passed: %d/10\n", passCount);
+
+    //-------------------------------------------------------------------------------------------------
+
+    printf("\nTesting:  8XY6    BitOp   Vx >> 1 Shifts VX right by one. VF is set to the value of the least significant bit of VX\n");
+    passCount = 0;
+    for (int i = 0; i < 10; i++) {
+        setPc(myChip8, 0x200);
+        uint8_t opcode[] = {0x80 + i, 6};
+        writeMem(myChip8, 0x200, 2, opcode);
+        setRegister(myChip8, i, i*11);
+        uint8_t regVal = getRegister(myChip8, i);
+        emulateCycle(myChip8);
+        printf("Register %d had value %d, setting it to %d, expected %d, VF is %d\n",
+            i, regVal, getRegister(myChip8, i), regVal >> 1, getRegister(myChip8, 0xF));
+        if (getRegister(myChip8, i) == (uint8_t)(regVal >> 1)) { passCount++; }
+    }
+    printf("Number of tests passed: %d/10\n", passCount);
+
+    printf("\nTesting:  8XY7    Math    Vx=Vy-Vx    Sets VX to VY minus VX. VF is set to 0 when there's a borrow, a\n");
+    passCount = 0;
+    for (int i = 0; i < 10; i++) {
+        setPc(myChip8, 0x200);
+        uint8_t opcode[] = {0x80, (i<<4) | 7};
+        writeMem(myChip8, 0x200, 2, opcode);
+        setRegister(myChip8, 0, 40);
+        setRegister(myChip8, i, i*10);
+        int reg0 = getRegister(myChip8, 0);
+        emulateCycle(myChip8);
+        printf("Register %d has value %d, setting V0 to %d, expected %d, VF is %d\n",
+            i, getRegister(myChip8, i), getRegister(myChip8, 0), (uint8_t)((i*10) - reg0), getRegister(myChip8, 0xF));
+        if (getRegister(myChip8, 0) == (uint8_t)((i*10) - reg0)) { passCount++; }
+    }
+    printf("Number of tests passed: %d/10\n", passCount);
+
+        //-------------------------------------------------------------------------------------------------
+
+    printf("\nTesting:  8XYE    BitOp   Vx << 1 Shifts VX left by one. VF is set to the value of the most significant bit of VX\n");
+    passCount = 0;
+    for (int i = 0; i < 10; i++) {
+        setPc(myChip8, 0x200);
+        uint8_t opcode[] = {0x80 + i, 0xE};
+        writeMem(myChip8, 0x200, 2, opcode);
+        setRegister(myChip8, i, i*25);
+        uint8_t regVal = getRegister(myChip8, i);
+        emulateCycle(myChip8);
+        printf("Register %d had value %d, setting it to %d, expected %d, VF is %d\n",
+            i, regVal, getRegister(myChip8, i), regVal << 1, getRegister(myChip8, 0xF));
+        if (getRegister(myChip8, i) == (uint8_t)(regVal << 1)) { passCount++; }
     }
     printf("Number of tests passed: %d/10\n", passCount);
 

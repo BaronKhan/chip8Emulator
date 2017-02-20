@@ -13,9 +13,9 @@ void (*opcodeTable[17])(chip8_h) =
 void (*arithmeticTable[15])(chip8_h) = 
 {
     cpuMOV, cpuOR, cpuAND, cpuXOR,
-    cpuADD, cpuNULL, cpuNULL, cpuNULL,
+    cpuADD, cpuSUB, cpuSHR, cpuRSB,
     cpuNULL, cpuNULL, cpuNULL, cpuNULL,
-    cpuNULL, cpuNULL, cpuNULL
+    cpuNULL, cpuNULL, cpuSHL
 };
 
 void cpuArithmetic(chip8_h state) {
@@ -131,4 +131,38 @@ void cpuADD(chip8_h state) {
     uint8_t y = getRegister(state, reg2);
     setRegister(state, reg1, (uint8_t)(x + y));
     setRegister(state, 0xF, !((uint8_t)(x + y) >= x && (uint8_t)(x + y) >= y));
+}
+
+void cpuSUB(chip8_h state) {
+    uint8_t reg1 = (getOpcode(state) >> 8) & 0xF;
+    uint8_t reg2 = (getOpcode(state) >> 4) & 0xF;
+    uint8_t x = (uint8_t)getRegister(state, reg1);
+    uint8_t y = (uint8_t)getRegister(state, reg2);
+    y = (~y) + 1;
+    setRegister(state, reg1, (uint8_t)(x + y));
+    setRegister(state, 0xF, ((uint8_t)(x + y) >= x && (uint8_t)(x + y) >= y));
+}
+
+void cpuSHR(chip8_h state) {
+    uint8_t reg1 = (getOpcode(state) >> 8) & 0xF;
+    uint8_t x = getRegister(state, reg1);
+    setRegister(state, 0xF, x & 1);
+    setRegister(state, reg1, x >> 1);
+}
+
+void cpuRSB(chip8_h state) {
+    uint8_t reg1 = (getOpcode(state) >> 8) & 0xF;
+    uint8_t reg2 = (getOpcode(state) >> 4) & 0xF;
+    uint8_t x = (uint8_t)getRegister(state, reg1);
+    uint8_t y = (uint8_t)getRegister(state, reg2);
+    x = (~x) + 1;
+    setRegister(state, reg1, (uint8_t)(y + x));
+    setRegister(state, 0xF, ((uint8_t)(y + x) >= x && (uint8_t)(y + x) >= y));
+}
+
+void cpuSHL(chip8_h state) {
+    uint8_t reg1 = (getOpcode(state) >> 8) & 0xF;
+    uint8_t x = getRegister(state, reg1);
+    setRegister(state, 0xF, (x >> 7) & 1);
+    setRegister(state, reg1, x << 1);
 }

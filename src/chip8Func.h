@@ -41,6 +41,10 @@ void cpuOR(chip8_h state);
 void cpuAND(chip8_h state);
 void cpuXOR(chip8_h state);
 void cpuADD(chip8_h state);
+void cpuSUB(chip8_h state);
+void cpuSHR(chip8_h state);
+void cpuRSB(chip8_h state);
+void cpuSHL(chip8_h state);
 
 #ifdef __cplusplus
 };
